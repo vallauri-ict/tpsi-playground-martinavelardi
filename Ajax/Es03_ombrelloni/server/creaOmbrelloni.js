@@ -20,14 +20,19 @@ $(document).ready(function() {
             ombrellone.stato.push(0) // metto 107 "0" nello stato
         ombrelloni.push(ombrellone);
     }
+    let json = { "utenti": utenti, "ombrelloni": ombrelloni }
+    json = JSON.stringify(json, null, 3)
+
+    let blob = new Blob([json], { type: 'application/json' })
+    $("a").prop("href", URL.createObjectURL(blob))
 
     // <a href="#" download="ombrelloni.json">salva json su disco</a>
     // "download" mostra il nome proposto da dare al file
-    $("<a>").prop({ "download": "ombrelloni.json", "href": "#" }).text("salva json su disco")
+    /*$("<a>").prop({ "download": "ombrelloni.json", "href": "#" }).text("salva json su disco")
         .appendTo(wrapper).on("click", function() {
             let json = { "utenti": utenti, "ombrelloni": ombrelloni }
             json = JSON.stringify(json, null, 3)
             let blob = new Blob([json], { type: 'application/json' });
             $(this).prop("href", URL.createObjectURL(blob));
-        })
+        })*/
 })
