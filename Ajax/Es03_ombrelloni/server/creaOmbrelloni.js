@@ -28,11 +28,15 @@ $(document).ready(function() {
 
     // <a href="#" download="ombrelloni.json">salva json su disco</a>
     // "download" mostra il nome proposto da dare al file
+    // download fa aprire una finestra di dialogo dopo che sono state eseguite le istruzioni interne a un click
     /*$("<a>").prop({ "download": "ombrelloni.json", "href": "#" }).text("salva json su disco")
         .appendTo(wrapper).on("click", function() {
             let json = { "utenti": utenti, "ombrelloni": ombrelloni }
             json = JSON.stringify(json, null, 3)
+            // trasforma questo json in un nuovo oggetto blob
+            // un blob è un file temporaneo in memoria centrale
             let blob = new Blob([json], { type: 'application/json' });
+            // URL.createObjectURL restituisce l'indirizzo del file temporaneo (blob)
             $(this).prop("href", URL.createObjectURL(blob));
         })*/
 })
