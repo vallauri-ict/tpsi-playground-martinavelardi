@@ -56,7 +56,7 @@ $(document).ready(function() {
         _lstModelli.prop("nome", opzioneSelezionata.split(' - ')[0]);
         _lstModelli.prop("alimentazione", opzioneSelezionata.split(' - ')[1]);
         let codiceModello = _lstModelli.val();
-        let request = inviaRichiesta("get", URL + "/modelli?codMarca=" + codiceModello);
+        let request = inviaRichiesta("get", URL + "/modelli?codModello=" + codiceModello);
         request.fail(errore);
         request.done(function(automobili) {
             let thead = $("<thead>");
@@ -106,7 +106,7 @@ $(document).ready(function() {
 
                 td = $("<td>")
                 td.appendTo(tr)
-                let button = $("<button>")
+                button = $("<button>")
                 button.appendTo(td)
                 td.text("Elimina")
             }
