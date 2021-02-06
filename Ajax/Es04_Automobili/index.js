@@ -125,6 +125,18 @@ $(document).ready(function() {
         });
 
     });
+
+    let _salva=$("#btnSalva")
+    _salva.on("click",function () {
+        let url=URL+"/automobili/"+$("#txtId").val()
+        let request=inviaRichiesta("patch",url,{"prezzo":parseInt($("#txtPrezzo").val())})
+        request.fail(errore)
+        request.done(function () {
+            alert("Record aggiornato correttamente")
+            _lstModelli.trigger("change")
+        })
+    })
+
     function dettagliClick() {
         _dettagli.show()
         $("#txtId").val(($(this).prop("automobile")).id)  // passo un oggetto completo
@@ -137,6 +149,7 @@ $(document).ready(function() {
         $("#txtKm").val(($(this).prop("modello")).km)
         $("#txtPrezzo").val(($(this).prop("modello")).prezzo)
     }
+
     function eliminaClick() {
         let url=URL+"/automobili/"+$(this).prop("id")
         let request=inviaRichiesta("delete",url)
