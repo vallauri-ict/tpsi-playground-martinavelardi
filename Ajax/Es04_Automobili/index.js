@@ -46,15 +46,19 @@ $(document).ready(function() {
                 option.val(modello.id);
                 option.text(modello.nome + " - " + modello.alimentazione);
                 option.appendTo(_lstModelli);
+                option.prop("modello",modello)  // dentro ogni opzione salvo tutte le info relative al modello
             }
             _lstModelli.prop("selectedIndex", -1);
         });
     });
 
     _lstModelli.on("change", function() {
-        let opzioneSelezionata = _lstModelli.children("option").eq(_lstModelli.prop("selectedIndex")).text(); // puntatore jquery perché c'è .eq()
-        _lstModelli.prop("nome", opzioneSelezionata.split(' - ')[0]);
-        _lstModelli.prop("alimentazione", opzioneSelezionata.split(' - ')[1]);
+        let opzioneSelezionata = _lstModelli.children("option").eq(_lstModelli.prop("selectedIndex")); // puntatore jquery perché c'è .eq()
+        //_lstModelli.prop("nome", opzioneSelezionata.split(' - ')[0]);
+        //_lstModelli.prop("alimentazione", opzioneSelezionata.split(' - ')[1]);
+
+        // salvo nel lst le informazioni relative al modello selezionato
+        _lstModelli.prop("modello",opzioneSelezionata.prop("modello"))
         let codiceModello = _lstModelli.val();
         let request = inviaRichiesta("get", URL + "/modelli?codModello=" + codiceModello);
         request.fail(errore);
@@ -77,11 +81,11 @@ $(document).ready(function() {
                 tr.appendTo(tbody)
                 let td = $("<td>")
                 td.appendTo(tr)
-                td.text(_lstModelli.prop("nome"))
+                td.text((_lstModelli.prop("modello")).nome)
 
                 td = $("<td>")
                 td.appendTo(tr)
-                td.text(_lstModelli.prop("alimentazione"))
+                td.text((_lstModelli.prop("alimentazione")).alimentazione)
 
                 td = $("<td>")
                 td.appendTo(tr)
@@ -101,16 +105,45 @@ $(document).ready(function() {
                 td = $("<td>")
                 td.appendTo(tr)
                 let button = $("<button>")
+                button.addClass("btn btn-xs btn-success")
+                button.prop("automobile",automobile)    // !! passo il json dell'automobile
                 button.appendTo(td)
                 td.text("Dettagli")
+                button.on("click",dettagliClick)
 
                 td = $("<td>")
                 td.appendTo(tr)
                 button = $("<button>")
+                button.addClass("btn btn-xs btn-secondary")
+                button.prop("id",automobile.id) // salvo l'id per capire quale record voglio eliminare
                 button.appendTo(td)
                 td.text("Elimina")
+                button.on("click",eliminaClick)
+
+                pos++
             }
         });
 
     });
+    function dettagliClick() {
+        _dettagli.show()
+        $("#txtId").val(($(this).prop("automobile")).id)  // passo un oggetto completo
+        $("#txtNome").val((_lstModelli.prop("modello")).nome)
+        $("#txtAlimentazione").val((_lstModelli.prop("modello")).alimentazione)
+        $("#txtCilindrata").val(($(this).prop("modello")).cilindrata)
+        $("#txtTarga").val(($(this).prop("modello")).targa)
+        $("#txtColore").val(($(this).prop("modello")).colore)
+        $("#txtAnno").val(($(this).prop("modello")).anno)
+        $("#txtKm").val(($(this).prop("modello")).km)
+        $("#txtPrezzo").val(($(this).prop("modello")).prezzo)
+    }
+    function eliminaClick() {
+        let url=URL+"/automobili/"+$(this).prop("id")
+        let request=inviaRichiesta("delete",url)
+        request.fail(errore)
+        request.done(function () {
+            alert("Record eliminato correttamente")
+            _lstModelli.trigger("change")   // forza l'evento change, come se avessi cliccato col mouse
+        })
+    }
 });
